@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { NextPage } from "next";
 import React from "react";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
@@ -93,12 +92,15 @@ const Home: NextPage = () => {
   };
 
   React.useEffect(() => {
-    window.ethereum.on("accountsChanged", (accounts: Array<string>) => {
-      setAddress(accounts[0]);
-      localStorage.setItem("address", accounts[0]);
-      setNFTList([]);
-      setOpenSeaNFTList([]);
-    });
+    (window as any).ethereum.on(
+      "accountsChanged",
+      (accounts: Array<string>) => {
+        setAddress(accounts[0]);
+        localStorage.setItem("address", accounts[0]);
+        setNFTList([]);
+        setOpenSeaNFTList([]);
+      }
+    );
     const address = localStorage.getItem("address");
     if (address) {
       setAddress(address);
@@ -120,9 +122,9 @@ const Home: NextPage = () => {
       )
         .then((response) => response.json())
         .then((response) => {
-          const slugs = response.map((item) => item.slug);
+          const slugs = response.map((item: any) => item.slug);
           return Promise.all(
-            slugs.map((slug) =>
+            slugs.map((slug: any) =>
               fetch(
                 `https://api.opensea.io/api/v1/collection/${slug}`,
                 options
@@ -164,7 +166,7 @@ const Home: NextPage = () => {
     ]).then((values) => {
       console.log("values", values);
       setLoading(false);
-      setOpenSeaNFTList(values[0]);
+      setOpenSeaNFTList(values[0] as any);
       setNormalTxn(values[1]);
       setNFTList(values[2]);
     });
@@ -172,19 +174,19 @@ const Home: NextPage = () => {
 
   React.useEffect(() => {
     const totalProfit = NFTList.reduce(
-      (acc, cur) => acc + calcProfit(cur.contractAddress, cur.blockHash),
+      (acc, cur: any) => acc + calcProfit(cur.contractAddress, cur.blockHash),
       0
     );
 
     const totalInvest = NFTList.reduce(
-      (acc, cur) => acc + calcTotal(cur.blockHash),
+      (acc, cur: any) => acc + calcTotal(cur.blockHash),
       0
     );
 
     setTotalProfit(totalProfit);
     setTotalInvest(totalInvest);
 
-    const rows = NFTList.map((NFT, index) => {
+    const rows = NFTList.map((NFT: any, index) => {
       return {
         id: index + 1,
         projectName: NFT.tokenName,
@@ -198,20 +200,22 @@ const Home: NextPage = () => {
       };
     });
 
-    setRows(rows);
+    setRows(rows as any);
   }, [NFTList, openSeaNFTList]);
 
   const calcPrice = (blockHash: string) => {
     return (
-      normalTxn.find((txn) => txn.blockHash === blockHash)?.value /
-        Math.pow(10, 18) || 0
+      (normalTxn.find((txn: any) => txn.blockHash === blockHash) as any)
+        ?.value / Math.pow(10, 18) || 0
     );
   };
 
   const calcGas = (blockHash: string) => {
     return (
-      (normalTxn.find((txn) => txn.blockHash === blockHash)?.gasPrice *
-        normalTxn.find((txn) => txn.blockHash === blockHash)?.gasUsed) /
+      ((normalTxn.find((txn: any) => txn.blockHash === blockHash) as any)
+        ?.gasPrice *
+        (normalTxn.find((txn: any) => txn.blockHash === blockHash) as any)
+          ?.gasUsed) /
         Math.pow(10, 18) || 0
     );
   };
@@ -222,10 +226,10 @@ const Home: NextPage = () => {
 
   const getFloorPrice = (contractAddress: string) => {
     return (
-      openSeaNFTList.find(
-        (nft) =>
+      ( openSeaNFTList.find(
+        (nft:any) =>
           nft.collection.primary_asset_contracts[0]?.address === contractAddress
-      )?.collection.stats.floor_price || 0
+      ) as any)?.collection.stats.floor_price || 0
     );
   };
 
@@ -252,7 +256,7 @@ const Home: NextPage = () => {
       setAddress(undefined);
       return;
     }
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const provider = new ethers.providers.Web3Provider(( window as any).ethereum);
     const accounts = await provider.send("eth_requestAccounts", []);
 
     if (accounts[0]) {
