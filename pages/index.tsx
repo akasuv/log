@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { NextPage } from "next";
 import React from "react";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
