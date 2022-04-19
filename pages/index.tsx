@@ -437,7 +437,14 @@ const Home: NextPage = () => {
     ) {
       updateTxn();
     }
-  }, [normalTxnList, ERC721TxnList, bufferRows, rows, loadingAssets]);
+  }, [
+    normalTxnList,
+    ERC721TxnList,
+    bufferRows,
+    rows,
+    loadingAssets,
+    moralisNFTTxnList,
+  ]);
 
   function getCollections(index: number) {
     const row = bufferRows[index];
@@ -584,7 +591,7 @@ const Home: NextPage = () => {
   }
 
   function fetchERC721TxnList() {
-    return fetch(
+    fetch(
       "https://api.etherscan.io/api" +
         "?module=account" +
         "&action=tokennfttx" +
