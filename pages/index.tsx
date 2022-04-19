@@ -552,7 +552,7 @@ const Home: NextPage = () => {
 
   function fetchNormalTxnList() {
     fetch(
-      "http://api.etherscan.io/api" +
+      "https://api.etherscan.io/api" +
         "?module=account" +
         "&action=txlist" +
         `&address=${address}` +
