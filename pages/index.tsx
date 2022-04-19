@@ -79,10 +79,8 @@ const Home: NextPage = () => {
   const login = async () => {
     if (!isAuthenticated) {
       await authenticate({ signingMessage: "Log in using Moralis" })
-        .then(function (user) {
-        })
-        .catch(function (error) {
-        });
+        .then(function (user) {})
+        .catch(function (error) {});
     }
   };
 
@@ -289,15 +287,13 @@ const Home: NextPage = () => {
     (window as any).ethereum?.on(
       "accountsChanged",
       (accounts: Array<string>) => {
-        setAddress("0x5fd9b0b7e15b4d106624ea9cf96602996c9c344d");
-        // setAddress(accounts[0]);
+        setAddress(accounts[0]);
         localStorage.setItem("address", accounts[0]);
       }
     );
     const address = localStorage.getItem("address");
     if (address) {
-      setAddress("0x5fd9b0b7e15b4d106624ea9cf96602996c9c344d");
-      // setAddress(address);
+      setAddress(address);
     }
   }, []);
 
@@ -673,8 +669,7 @@ const Home: NextPage = () => {
     if (accounts[0]) {
       login();
       localStorage.setItem("address", accounts[0]);
-      // setAddress(accounts[0]);
-      setAddress("0x5fd9b0b7e15b4d106624ea9cf96602996c9c344d");
+      setAddress(accounts[0]);
     }
   };
 
